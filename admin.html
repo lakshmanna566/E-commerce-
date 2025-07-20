@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title><link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h2>Admin - Add Product</h2>
+  <form id="product-form">
+    <input type="text" id="name" placeholder="Product Name" required />
+    <input type="number" id="price" placeholder="Price" required />
+    <input type="text" id="image" placeholder="Image URL" required />
+    <button type="submit">Add Product</button>
+  </form>
+  <h3>All Products</h3><div id="product-list"></div>
+  <script>
+    const form = document.getElementById('product-form');
+    const list = document.getElementById('product-list');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const price = document.getElementById('price').value;
+      const image = document.getElementById('image').value;
+      await fetch('http://localhost:5000/products', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, price, image })
+      });
+      alert('Product added!'); form.reset(); loadProducts();
+    });
+    async function loadProducts() {
+      const res = await fetch('http://localhost:5000/products');
+      const products = await res.json();
+      list.innerHTML = '';
+      products.forEach(p => {
+        const div = document.createElement('div');
+        div.innerHTML = `<strong>${p.name}</strong> - $${p.price}`;
+        list.appendChild(div);
+      });
+    }
+    loadProducts();
+  </script>
+</body>
+</html>

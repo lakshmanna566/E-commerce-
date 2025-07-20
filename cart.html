@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart</title><link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h2>Your Shopping Cart</h2><div id="cart-items"></div>
+  <h3 id="total">Total: ₹0</h3>
+  <button onclick="checkout()">Checkout</button>
+  <script>
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartDiv = document.getElementById('cart-items');
+    const totalDisplay = document.getElementById('total');
+    let total = 0;
+    cartItems.forEach(item => {
+      const div = document.createElement('div');
+      div.innerHTML = `${item.name} - ₹${item.price}`;
+      cartDiv.appendChild(div);
+      total += parseFloat(item.price);
+    });
+    totalDisplay.textContent = `Total: ₹${total}`;
+    function checkout() {
+      alert('Payment successful! Thank you for shopping.');
+      localStorage.removeItem('cart');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
